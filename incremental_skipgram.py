@@ -45,7 +45,8 @@ class IncrementalSkipGram:
 
         # net in pytorch
         self.model = SkipGram(self.max_vocab_size, self.vec_size)
-        self.model.to(self.device)
+        if self.device == 'cuda':
+            self.model.cuda()
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=0.5, momentum=0.9)
         self.criterion = torch.nn.BCEWithLogitsLoss()
 
