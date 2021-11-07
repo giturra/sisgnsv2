@@ -111,7 +111,7 @@ class IncrementalSkipGram:
                 
         
         self.optimizer.step()      
-                
+        print(self.model.pa)        
             
         
     def update_unigram_table(self, word: str):
