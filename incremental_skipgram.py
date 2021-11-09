@@ -16,7 +16,8 @@ class IncrementalSkipGram:
         neg_sample_num=5,
         alpha=0.75,
         subsampling_threshold=1e-3,
-        tokenizer=None):
+        tokenizer=None, 
+        device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
     
         self.vec_size = int(vec_size)
 
@@ -24,9 +25,9 @@ class IncrementalSkipGram:
         self.vocab = Vocabulary(int(self.max_vocab_size * 2))
 
         self.unigram_table_size = unigram_table_size
-        self.unigram_table = UnigramTable(self.unigram_table_size)
+        self.unigram_table = UnigramTable(self.unigram_table_size, device=device)
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device
 
         self.counts = torch.zeros(int(2 * self.max_vocab_size))
         self.counts.to(self.device)

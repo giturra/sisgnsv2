@@ -2,8 +2,9 @@ import torch
  
 class UnigramTable:
 
-    def __init__(self, max_size) -> None:
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    def __init__(self, max_size, 
+    device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
+        self.device = device
         
         self.max_size = max_size
         self.current_size = 0
