@@ -80,9 +80,7 @@ class IncrementalSkipGram:
                         continue
                     for k in range(0, self.neg_sample_num):
                         neg_samples[k] = int(self.unigram_table.sample(self.randomizer))
-                    #print(neg_samples)
-                    #print("wenas")
-                    #print(neg_samples)
+
                     if X_input is None and y_true is None:
                         X_input, y_true = create_input(target_index, context_index, neg_samples)    
                         #print(X_input.size())
@@ -95,13 +93,6 @@ class IncrementalSkipGram:
                         X_input.to(self.device)
                         y_true = torch.vstack((y_true, labels))
                         y_true.to(self.device)
-                    # input_nn, labels = create_input(target_index, context_index, neg_samples)
-                    # input_nn.to(self.device)
-                    # print(input_nn.size())
-                    # labels = labels.float()
-                    # labels.to(self.device)
-                    # print(input_nn)
-                    # print(labels)
         y_pred = self.model(X_input)
         y_pred.to(self.device)
                 
