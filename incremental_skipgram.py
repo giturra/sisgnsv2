@@ -1,9 +1,9 @@
 import torch
 import numpy as np
-from .vocab import Vocabulary
-from .unigram_table import UnigramTable
-from .rand import RandomNum
-from .skipgram import SkipGram
+from vocab import Vocabulary
+from unigram_table import UnigramTable
+from rand import RandomNum
+from skipgram import SkipGram
 
 class IncrementalSkipGram:
 
@@ -93,6 +93,7 @@ class IncrementalSkipGram:
                         X_input.to(self.device)
                         y_true = torch.vstack((y_true, labels))
                         y_true.to(self.device)
+
         y_pred = self.model(X_input)
         y_pred.to(self.device)
                 
@@ -113,6 +114,14 @@ class IncrementalSkipGram:
             self.counts[word_index] += 1
             F = np.power(self.counts[word_index], self.alpha) - np.power(self.counts[word_index] - 1, self.alpha)
             self.unigram_table.update(word_index, F, self.randomizer)
+
+
+    def get_embedding(self, word):
+        index = self.vocab[word]
+        u  = self.model.embedding_u.weight[index]
+        v  = self.model.embedding_v.weight[index]
+        return ((u + v) / 2).to(self.device)
+
 
 def create_input(target_index, context_index, neg_samples):
     input = [[int(target_index), int(context_index)]]
