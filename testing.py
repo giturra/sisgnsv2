@@ -22,7 +22,7 @@ from sklearn.manifold import TSNE
 
 cuda = torch.device('cuda:0')
 
-train_iter = AG_NEWS(split='test')
+train_iter = AG_NEWS(split='train')
 
 dataloader = DataLoader(train_iter, batch_size=256, shuffle=False)
 
@@ -46,7 +46,7 @@ plt.scatter(result[:, 0], result[:, 1])
 for i, word in enumerate(vocab):
 	plt.annotate(word, xy=(result[i, 0], result[i, 1]))
 
-plt.title('Streaming PPMI 100 Words from Vocabulary')
-plt.savefig('grafico')
+plt.title('Incremental SGNS 100 Words from Vocabulary')
+plt.savefig('grafico_ag_news_train.png')
 
-torch.save(isn.model.state_dict(), './isn_model.path')
+torch.save(isn.model.state_dict(), './isn_model_ag_news.path')
