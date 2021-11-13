@@ -48,3 +48,5 @@ for i, word in enumerate(vocab):
 
 plt.title('Streaming PPMI 100 Words from Vocabulary')
 plt.savefig('grafico')
+
+torch.save(isn.model.state_dict(), './isn_model.path')
