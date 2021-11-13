@@ -33,7 +33,7 @@ with torch.cuda.device(0):
 
 vocab = list(isn.vocab.table.keys())[0:100]
 embeddings = [
-    isn.get_embedding(word).numpy() for word in vocab
+    isn.get_embedding(word).detach().numpy() for word in vocab
 ]
 
 # pca = PCA(n_components=2)
