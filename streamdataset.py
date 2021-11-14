@@ -1,8 +1,5 @@
 import numpy as np
 import torch as T
-device = T.device("cpu")
-from tqdm import tqdm
-
 
 class TweetStreamLoader: 
 
@@ -18,7 +15,7 @@ class TweetStreamLoader:
 
     self.rnd = np.random.RandomState(seed)
 
-    self.ptr = 0              # points into x_data and y_data
+    self.ptr = 0              # pointers to data
     self.fin = open(fn, encoding='utf-8')  # line-based text file
 
     self.buffer = []      
@@ -54,7 +51,6 @@ class TweetStreamLoader:
     res = 0 
 
     if self.ptr + self.bat_size > self.buff_size:  # reload
-      print(" ** reloading buffer ** ")
       res = self.reload_buffer() 
       # 0 = success, -1 = hit eof, -2 = not fully loaded 
 
@@ -69,31 +65,32 @@ class TweetStreamLoader:
     self.reload_buffer()  # prepare for next epoch
     raise StopIteration
  
+  
+  def close(self):
+    self.fin.close()
 # -----------------------------------------------------------
 
 def main():
   print("\nBegin streaming data loader demo ")
   np.random.seed(1)
 
-  fn = "D:/u/tesis/twitterStream-20091110-20100201-v0.1.1/twitterStream-20091110-20100201-v0.1.1"  # 40 lines of data
-  bat_size = 8 
-  buff_size = 24  # a multiple of bat_size
+  # fn = "D:/u/tesis/twitterStream-20091110-20100201-v0.1.1/twitterStream-20091110-20100201-v0.1.1"  # 40 lines of data
+  fn = "100000tweet.txt"
+  bat_size = 256 
+  buff_size = 2048  # a multiple of bat_size
   emp_ldr = TweetStreamLoader(fn, bat_size, buff_size, \
     shuffle=False) 
 
   max_epochs = 1
   # for epoch in range(max_epochs):
   #   #print("\n == Epoch: " + str(epoch) + " ==")
-  tweets_file = open('100000tweet.txt', "w", encoding='utf-8')
   i = 0
+  c = 0
   for (b_idx, batch) in enumerate(emp_ldr):
-    #print("epoch: " + str(epoch) + "   batch: " + str(b_idx)) 
-    tweet = batch[0].split('\t')[2]  # predictors
-    tweets_file.write(f'{tweet}\n')
-    if i == 1e6:
-      break
-    i += 1
-  tweets_file.close()
+    i += len(batch)
+    c += 1
+    print(len(batch))
+  print(i, c)
   emp_ldr.fin.close()
 
 print("End demo ")
